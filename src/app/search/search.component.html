@@ -7,7 +7,8 @@
 </div>
 
 <div class="input-search">
-    <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search(1)" placeholder="Nhập tên nhà văn">
+    <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" #searchInput (keyup.enter)="search(1)"
+        placeholder="Nhập tên nhà văn">
     <button (click)="search(1)"><i class="fa fa-search"></i> Tìm kiếm</button>
 </div>
 
@@ -35,7 +36,12 @@
         </tbody>
     </table>
 
-    <div class="pagination">
+    <div *ngIf="showPlaceholder" class="placeholder-container">
+        <!-- Hiển thị placeholder khi không có dữ liệu -->
+        <p>Không có dữ liệu</p>
+    </div>
+
+    <div class="pagination" *ngIf="!showPlaceholder">
         <button class="nextpage-button" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">Trang
             trước</button>
         <span>Trang {{ currentPage }}</span>

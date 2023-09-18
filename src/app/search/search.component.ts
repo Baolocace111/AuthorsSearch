@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -17,7 +20,12 @@ export class SearchComponent implements OnInit {
   modalVisible = false; // Biến để kiểm soát hiển thị modal
   loading: boolean = false; //Biến để kiểm soát việc hiển thị spinning load
 
-  constructor( private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
+  searchSubject: Subject<string> = new Subject<string>();
+  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
+
+  showPlaceholder: boolean = false; // Biến kiểm soát hiển thị placeholder
+
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.searchQuery = '';
@@ -28,17 +36,34 @@ export class SearchComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.searchQuery = params['q'] || '';
       const page = +params['page'] || 1; // Lấy thông tin về trang hiện tại từ tham số 'page'
-  
+
       if (this.searchQuery) {
         this.search(page); // Thực hiện tìm kiếm với trang hiện tại
       }
     });
+
+    // Tự động tìm kiếm sau 1 giây kể từ khi gõ phím cuối cùng
+    this.searchSubject.pipe(debounceTime(1000)).subscribe(() => {
+      if (this.searchQuery.trim() !== '') 
+        this.search(1);
+    });
+  }
+
+  // Sau khi nhập xong input, gửi giá trị đó đến searchSubject
+  onSearch() {
+    this.searchSubject.next(this.searchQuery);
   }
 
   search(page: number) {
     this.loading = true; // Bắt đầu tải dữ liệu
-    this.currentPage = page; 
-    this.fetchAuthors();
+    this.currentPage = page;
+    if (this.searchQuery) {
+      this.fetchAuthors();
+    } else {
+      this.authors = [];
+      this.totalItems = 0;
+      this.showPlaceholder = true;
+    }
 
     // Sau khi cập nhật kết quả, cập nhật page hiện tại vào URL
     this.router.navigate([], {
@@ -55,12 +80,17 @@ export class SearchComponent implements OnInit {
       this.authors = response.docs;
       this.totalItems = response.numFound;
       this.loading = false; // Kết thúc tải dữ liệu
+
+      // Kiểm tra xem có dữ liệu hay không
+      this.showPlaceholder = !this.totalItems;
     });
   }
 
   onPageChange(page: number) {
     this.currentPage = page;
-    this.fetchAuthors();
+    if (this.searchQuery) {
+      this.search(page);
+    }
 
     this.router.navigate([], {
       queryParams: { q: this.searchQuery, page: page },
@@ -74,11 +104,11 @@ export class SearchComponent implements OnInit {
     this.fetchAuthorDetails(key); // Gọi hàm để tải thông tin chi tiết từ API
     this.modalVisible = true; // Hiển thị modal
   }
-  
+
   closeModal() {
     this.modalVisible = false; // Đóng modal
   }
-  
+
   fetchAuthorDetails(key: string) {
     const url = `https://openlibrary.org/authors/${key}.json`;
     this.http.get(url).subscribe((response: any) => {

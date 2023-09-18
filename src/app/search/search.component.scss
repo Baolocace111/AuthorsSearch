@@ -26,6 +26,14 @@
     margin-left: 10px;
 }
 
+/*Hiển thị thông báo nếu không có nhà văn nào*/
+.placeholder-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
 /*Modal xem chi tiết*/
 #modal {
     position: fixed;

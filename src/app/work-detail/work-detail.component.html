@@ -1,0 +1,12 @@
+<div class="modal-content">
+  <h2>{{ work.title }}</h2>
+  <hr>
+  <p><b>Key:</b> {{ work.key }}</p>
+  <p><b>Subject:</b> {{ work.subjects }}</p>
+  <p><b>Characters:</b> {{ work.subject_people }}</p>
+  <p><b>Latest Revision:</b> {{ work.latest_revision }}</p>
+  <p><b>Created At:</b> {{ work.created.value | date: 'dd/MM/yyyy' }}</p>
+  <p><b>Last-Modified At:</b> {{ work.last_modified.value | date: 'dd/MM/yyyy' }}</p>
+  <hr>
+  <button class="close-button" (click)="onCloseModal()">Đóng</button>
+</div>

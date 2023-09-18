@@ -1,0 +1,59 @@
+<div>
+    <h2>Tra cứu nhà văn và tác phẩm</h2>
+</div>
+
+<div *ngIf="loading" class="spinner-container">
+    <div class="spinner"></div>
+</div>
+
+<div class="input-search">
+    <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search(1)" placeholder="Nhập tên nhà văn">
+    <button (click)="search(1)"><i class="fa fa-search"></i> Tìm kiếm</button>
+</div>
+
+<div class="authors-container">
+    <table class="authors-table">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Name</th>
+                <th>Information</th>
+                <th>Achievement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let author of authors">
+                <td style="color: red">{{ author.key }}</td>
+                <td>{{ author.name }}</td>
+                <td>
+                    <button (click)="openModal(author.key)">Details</button>
+                </td>
+                <td>
+                    <button (click)="seeWorks(author.key)">All Works</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <button class="nextpage-button" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">Trang
+            trước</button>
+        <span>Trang {{ currentPage }}</span>
+        <button class="prevpage-button" [disabled]="currentPage * 10 >= totalItems"
+            (click)="onPageChange(currentPage + 1)">Trang sau</button>
+    </div>
+</div>
+
+<!--Modal-->
+<div id="modal" *ngIf="modalVisible && selectedAuthor">
+    <div class="modal-content">
+        <h2>{{ selectedAuthor.name }}</h2>
+        <hr>
+        <p><b>Birth Year:</b> {{ selectedAuthor.birth_date }}</p>
+        <p><b>Death Year:</b> {{ selectedAuthor.death_date }}</p>
+        <p><b>Personal Name:</b> {{ selectedAuthor.personal_name }}</p>
+        <p><b>Updated At:</b> {{ selectedAuthor.created.value | date: 'dd/MM/yyyy' }}</p>
+        <hr>
+        <button class="close-button" (click)="closeModal()">Đóng</button>
+    </div>
+</div>

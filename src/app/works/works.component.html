@@ -1,0 +1,31 @@
+<h2>Danh sách tác phẩm</h2>
+
+<div *ngIf="loading" class="spinner-container">
+    <div class="spinner"></div>
+</div>
+
+<table class="works-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let work of works">
+            <td class="title-cell">{{ work.title }}</td>
+            <td>{{ work.subjects }}</td>
+            <td>
+                <button (click)="openModal(work)">Details</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button class="button-back" (click)="goBack()">Go Back</button>
+
+<!-- Modal -->
+<div *ngIf="isModalOpen" id="modal">
+    <app-work-detail [work]="selectedWork" (closeModal)="closeModal()"></app-work-detail>
+</div>

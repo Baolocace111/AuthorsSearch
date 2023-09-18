@@ -1,0 +1,122 @@
+h2 {
+    color: red;
+    font-size: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+hr {
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+/* Bảng */
+.works-table {
+    width: 60%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+/* Tiêu đề bảng */
+.works-table thead {
+    background-color: rgba(76, 231, 200, 0.419);
+}
+
+.works-table th {
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}
+
+/* Dòng dữ liệu */
+.works-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.works-table td {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.works-table tbody tr:hover {
+    background-color: #e6f7ff;
+}
+
+.title-cell {
+    max-width: 600px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Nút xem chi tiết */
+.works-table button {
+    padding: 6px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/*Go back*/
+.button-back {
+    margin-left: 20%;
+    background-color: #ccc;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-back:hover {
+    background-color: red;
+}
+
+/*Spinning load*/
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Thêm các lớp CSS hoặc tùy chỉnh spinner tại đây */
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid blueviolet;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*Modal xem chi tiết*/
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Màu nền của modal */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
